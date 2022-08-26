@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: service-product
+  profiles:
+      active: dev
+  cloud:
+      nacos:
+        discovery:
+          server-addr: 47.94.107.24:8848
