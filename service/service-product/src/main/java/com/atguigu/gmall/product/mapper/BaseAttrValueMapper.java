@@ -1,16 +1,15 @@
 package com.atguigu.gmall.product.mapper;
 
-import com.atguigu.gmall.model.product.BaseCategory2;
+import com.atguigu.gmall.model.product.BaseAttrValue;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**
- * @PROJECT_NAME: gamallparent
+ * @PROJECT_NAME: gmallparent
  * @DESCRIPTION:
  * @USER: Administrator
- * @DATE: 2022/8/26 10:39
+ * @DATE: 2022/8/26 17:08
  */
 @Repository
-public interface BaseCategory2Mapper extends BaseMapper<BaseCategory2> {
+public interface BaseAttrValueMapper extends BaseMapper<BaseAttrValue> {
 }

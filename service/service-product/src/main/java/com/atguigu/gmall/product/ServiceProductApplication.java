@@ -15,7 +15,6 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan({"com.atguigu.gmall"})
 @EnableDiscoveryClient
-@MapperScan({"com.atguigu.gmall.product.mapper"})
 public class ServiceProductApplication {
     public static void main(String[] args) {
         SpringApplication.run(ServiceProductApplication.class, args);

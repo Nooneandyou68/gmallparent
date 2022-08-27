@@ -1,15 +1,10 @@
 package com.atguigu.gmall.product.controller;
 
 import com.atguigu.gmall.common.result.Result;
-import com.atguigu.gmall.model.product.BaseCategory1;
-import com.atguigu.gmall.model.product.BaseCategory2;
-import com.atguigu.gmall.model.product.BaseCategory3;
+import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.product.service.ManageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -58,5 +53,49 @@ public class ManageController {
     public Result<List<BaseCategory3>> getCategory3(@PathVariable Long category2Id) {
         List<BaseCategory3> baseCategory3List = manageService.getCategory3(category2Id);
         return Result.ok(baseCategory3List);
+    }
+
+    /**
+     * 根据分类Id 获取平台属性数据
+     *
+     * @param
+     * @return
+     * @author SongBoHao
+     * @date 2022/8/26 10:36
+     */
+    @GetMapping("attrInfoList/{category1Id}/{category2Id}/{category3Id}")
+    public Result<List<BaseAttrInfo>> getAttrInfoList(@PathVariable Long category1Id,
+                                                      @PathVariable Long category2Id,
+                                                      @PathVariable Long category3Id) {
+        List<BaseAttrInfo> baseAttrInfoList = this.manageService.getAttrInfoList(category1Id, category2Id, category3Id);
+        return Result.ok(baseAttrInfoList);
+    }
+
+    /**
+     * 保存平台属性方法
+     *
+     * @param
+     * @return
+     * @author SongBoHao
+     * @date 2022/8/26 18:45
+     */
+    @PostMapping("saveAttrInfo")
+    public Result saveAttrInfo(@RequestBody BaseAttrInfo baseAttrInfo) {
+        this.manageService.saveAttrInfo(baseAttrInfo);
+        return Result.ok();
+    }
+
+    /**
+     * 根据属性id获取属性值
+     *
+     * @param attrId
+     * @return
+     */
+    @GetMapping("getAttrValueList/{attrId}")
+    public Result<List<BaseAttrValue>> getAttrValueList(@PathVariable Long attrId) {
+        //先根据平台属性Id 判断是否有这个属性，如果有这个属性，再获取到平台属性值集合
+        BaseAttrInfo baseAttrInfo = manageService.getAttrInfo(attrId);
+        List<BaseAttrValue> attrValueList = baseAttrInfo.getAttrValueList();
+        return Result.ok(attrValueList);
     }
 }

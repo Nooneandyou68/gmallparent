@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
  * @USER: Administrator
  * @DATE: 2022/8/26 10:40
  */
-@Mapper
+@Repository
 public interface BaseCategory3Mapper extends BaseMapper<BaseCategory3> {
 }
