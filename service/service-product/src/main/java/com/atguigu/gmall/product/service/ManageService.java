@@ -75,4 +75,15 @@ public interface ManageService {
      * @return
      */
     BaseAttrInfo getAttrInfo(Long attrId);
+
+    /**
+     * 查询销售属性集合
+     *
+     * @param
+     * @return
+     * @author SongBoHao
+     * @date 2022/8/29 17:18
+     */
+    List<BaseSaleAttr> baseSaleAttrList();
+
 }

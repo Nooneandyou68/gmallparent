@@ -1,5 +1,6 @@
 package com.atguigu.gmall.product.service.impl;
 
+import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.product.mapper.*;
 import com.atguigu.gmall.product.service.ManageService;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +35,8 @@ public class ManageServiceImpl implements ManageService {
     private BaseAttrInfoMapper baseAttrInfoMapper;
     @Autowired
     private BaseAttrValueMapper baseAttrValueMapper;
-
+    @Autowired
+    private BaseSaleAttrMapper baseSaleAttrMapper;
     @Override
     public List<BaseCategory1> getCategory1() {
 
@@ -141,4 +145,19 @@ public class ManageServiceImpl implements ManageService {
         }
         return baseAttrInfo;
     }
+
+    /**
+     * 查询销售属性集合
+     *
+     * @param
+     * @return
+     * @author SongBoHao
+     * @date 2022/8/29 17:19
+     */
+    @Override
+    public List<BaseSaleAttr> baseSaleAttrList() {
+        return baseSaleAttrMapper.selectList(null);
+    }
+
+
 }

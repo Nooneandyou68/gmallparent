@@ -6,6 +6,7 @@ import com.atguigu.gmall.product.service.BaseTrademarkService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @DATE: 2022/8/27 18:39
  */
 @Service
-public class BaseTrademarkServiceImpl implements BaseTrademarkService {
+public class BaseTrademarkServiceImpl extends ServiceImpl<BaseTrademarkMapper, BaseTrademark> implements BaseTrademarkService {
 
     @Autowired
     private BaseTrademarkMapper baseTrademarkMapper;

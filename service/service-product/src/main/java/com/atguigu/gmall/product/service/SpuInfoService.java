@@ -16,4 +16,9 @@ public interface SpuInfoService {
      */
     IPage<SpuInfo> getSpuList(Page<SpuInfo> spuInfoPage, SpuInfo spuInfo);
 
+    /**
+     * 保存spu数据
+     * @param spuInfo
+     */
+    void saveSpuInfo(SpuInfo spuInfo);
 }

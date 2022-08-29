@@ -1,15 +1,16 @@
 package com.atguigu.gmall.product.controller;
 
 import com.atguigu.gmall.common.result.Result;
+import com.atguigu.gmall.model.product.BaseSaleAttr;
 import com.atguigu.gmall.model.product.SpuInfo;
+import com.atguigu.gmall.product.service.ManageService;
 import com.atguigu.gmall.product.service.SpuInfoService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @PROJECT_NAME: gmallparent
@@ -20,8 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController//组合注解@ResponseBody 返回json数据 @Controller
 @RequestMapping("admin/product/")
 public class SpuManageController {
+    // 引入服务层
     @Autowired
     private SpuInfoService spuInfoService;
+    @Autowired
+    private ManageService manageService;
 
     /**
      * 根据三级分类Id 查询spu 列表！
@@ -32,10 +36,26 @@ public class SpuManageController {
      */
     @GetMapping("/{page}/{limit}")
     public Result<IPage<SpuInfo>> getSpuList(@PathVariable Long page,
-                             @PathVariable Long limit,
-                             SpuInfo spuInfo) {
-        Page<SpuInfo> spuInfoPage = new Page<>(page,limit);
+                                             @PathVariable Long limit,
+                                             SpuInfo spuInfo) {
+        Page<SpuInfo> spuInfoPage = new Page<>(page, limit);
         IPage<SpuInfo> spuInfoIPage = spuInfoService.getSpuList(spuInfoPage, spuInfo);
         return Result.ok(spuInfoIPage);
+    }
+
+    @GetMapping("baseSaleAttrList")
+    public Result<List<BaseSaleAttr>> baseSaleAttrList() {
+        List<BaseSaleAttr> baseSaleAttrList = this.manageService.baseSaleAttrList();
+        return Result.ok(baseSaleAttrList);
+    }
+
+    /**
+     * 保存spu
+     */
+
+    @PostMapping("saveSpuInfo")
+    public Result saveSpuInfo(@RequestBody SpuInfo spuInfo){
+        spuInfoService.saveSpuInfo(spuInfo);
+        return Result.ok();
     }
 }
