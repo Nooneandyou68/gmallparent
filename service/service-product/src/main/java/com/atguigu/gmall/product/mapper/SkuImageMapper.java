@@ -1,18 +1,16 @@
 package com.atguigu.gmall.product.mapper;
 
-import com.atguigu.gmall.model.product.SpuSaleAttr;
+import com.atguigu.gmall.model.product.SkuImage;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-
-import java.util.List;
 
 /**
  * @PROJECT_NAME: gmallparent
  * @DESCRIPTION:
  * @USER: Administrator
- * @DATE: 2022/8/29 17:33
+ * @DATE: 2022/8/30 18:01
  */
 @Mapper
-public interface SpuSaleAttrMapper extends BaseMapper<SpuSaleAttr> {
-    List<SpuSaleAttr> selectSpuSaleAttrList(Long spuId);
+public interface SkuImageMapper extends BaseMapper<SkuImage> {
+
 }

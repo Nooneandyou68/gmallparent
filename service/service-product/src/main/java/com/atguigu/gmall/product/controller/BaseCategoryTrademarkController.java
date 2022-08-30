@@ -82,4 +82,5 @@ public class BaseCategoryTrademarkController {
         //返回成功
         return Result.ok();
     }
+
 }

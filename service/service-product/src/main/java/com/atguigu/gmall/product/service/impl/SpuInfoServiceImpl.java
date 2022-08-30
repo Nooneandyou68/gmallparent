@@ -79,4 +79,42 @@ public class SpuInfoServiceImpl implements SpuInfoService {
             });
         });
     }
+    /**
+     * 修改数据回显
+     *
+     * @param
+     * @return
+     * @author SongBoHao
+     * @date 2022/8/30 19:31
+     */
+    @Override
+    public SpuInfo getSpuInfo(Long spuId) {
+        SpuInfo spuInfo = spuInfoMapper.selectById(spuId);
+        //根据spuId查询spu销售属性集合
+        List<SpuSaleAttr> spuSaleAttrList = spuSaleAttrMapper.selectSpuSaleAttrList(spuId);
+        spuInfo.setSpuSaleAttrList(spuSaleAttrList);
+        //根据spuId查询spu_image集合
+        List<SpuImage> spuImageList = spuImageMapper.selectList(new QueryWrapper<SpuImage>().eq("spu_id", spuId));
+        spuInfo.setSpuImageList(spuImageList);
+        //根据spuId查询海报集合
+        List<SpuPoster> spuPosterList = spuPosterMapper.selectList(new QueryWrapper<SpuPoster>().eq("spu_id", spuId));
+        spuInfo.setSpuPosterList(spuPosterList);
+        return spuInfo;
+    }
+
+    /**
+     * 修改保存
+     *
+     * @param
+     * @return
+     * @author SongBoHao
+     * @date 2022/8/30 19:31
+     */
+    @Override
+    public void updateSpuInfo(SpuInfo spuInfo) {
+        QueryWrapper<SpuInfo> spuInfoQueryWrapper = new QueryWrapper<>();
+        spuInfoQueryWrapper.eq("id", spuInfo.getId());
+        spuInfoMapper.delete(spuInfoQueryWrapper);
+        spuInfoMapper.insert(spuInfo);
+    }
 }

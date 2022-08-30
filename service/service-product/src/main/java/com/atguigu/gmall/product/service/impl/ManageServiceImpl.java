@@ -1,18 +1,15 @@
 package com.atguigu.gmall.product.service.impl;
 
-import com.atguigu.gmall.common.result.Result;
 import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.product.mapper.*;
 import com.atguigu.gmall.product.service.ManageService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,14 +34,33 @@ public class ManageServiceImpl implements ManageService {
     private BaseAttrValueMapper baseAttrValueMapper;
     @Autowired
     private BaseSaleAttrMapper baseSaleAttrMapper;
+    @Autowired
+    private SpuImageMapper spuImageMapper;
+    @Autowired
+    private SpuSaleAttrMapper spuSaleAttrMapper;
+    @Autowired
+    private SkuImageMapper skuImageMapper;
+    @Autowired
+    private SkuInfoMapper skuInfoMapper;
+    @Autowired
+    private SkuSaleAttrValueMapper skuSaleAttrValueMapper;
+    @Autowired
+    private SkuAttrValueMapper skuAttrValueMapper;
+    /**
+     * 根据一级id查询二级分类数据
+     *
+     * @param
+     * @return
+     * @author SongBoHao
+     * @date 2022/8/26 10:36
+     */
     @Override
     public List<BaseCategory1> getCategory1() {
-
         return baseCategory1Mapper.selectList(null);
     }
 
     /**
-     * 根据一级id查询二级分类数据
+     * 根据二级id查询二级分类数据
      *
      * @param
      * @return
@@ -57,7 +73,7 @@ public class ManageServiceImpl implements ManageService {
     }
 
     /**
-     * 根据二级id查询三级分类数据
+     * 根据三级id查询三级分类数据
      *
      * @param
      * @return
@@ -109,7 +125,7 @@ public class ManageServiceImpl implements ManageService {
         //循环遍历添加数据
         List<BaseAttrValue> attrValueList = baseAttrInfo.getAttrValueList();
         if (!CollectionUtils.isEmpty(attrValueList)) {
-            attrValueList.forEach(baseAttrValue->{
+            attrValueList.forEach(baseAttrValue -> {
                 baseAttrValue.setAttrId(baseAttrInfo.getId());
                 baseAttrValueMapper.insert(baseAttrValue);
             });
@@ -139,7 +155,7 @@ public class ManageServiceImpl implements ManageService {
     public BaseAttrInfo getAttrInfo(Long attrId) {
         //根据attrId查询平台属性
         BaseAttrInfo baseAttrInfo = baseAttrInfoMapper.selectById(attrId);
-        if (baseAttrInfo!=null){
+        if (baseAttrInfo != null) {
             //  查询平台属性值集合数据并赋值
             baseAttrInfo.setAttrValueList(this.getAttrValueList(attrId));
         }
@@ -159,5 +175,108 @@ public class ManageServiceImpl implements ManageService {
         return baseSaleAttrMapper.selectList(null);
     }
 
+    /**
+     * 根据spuId 查询spuImageList
+     *
+     * @param spuId
+     * @return
+     */
+    @Override
+    public List<SpuImage> getSpuImageList(Long spuId) {
+        QueryWrapper<SpuImage> imageQueryWrapper = new QueryWrapper<>();
+        imageQueryWrapper.eq("spu_id", spuId);
+        return spuImageMapper.selectList(imageQueryWrapper);
+    }
 
+    /**
+     * 根据spuId 查询销售属性集合
+     *
+     * @param spuId
+     * @return
+     */
+    @Override
+    public List<SpuSaleAttr> getSpuSaleAttrList(Long spuId) {
+        return spuSaleAttrMapper.selectSpuSaleAttrList(spuId);
+    }
+    /**
+     * 保存sku
+     *
+     * @param skuInfo
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void saveSkuInfo(SkuInfo skuInfo) {
+        //sku_info
+        skuInfoMapper.insert(skuInfo);
+        //sku_image
+        List<SkuImage> skuImageList = skuInfo.getSkuImageList();
+        if (!CollectionUtils.isEmpty(skuImageList)) {
+            skuImageList.forEach(skuImage -> {
+                skuImage.setSkuId(skuInfo.getId());
+                skuImageMapper.insert(skuImage);
+            });
+        }
+        //sku_sale_attr_value
+        List<SkuSaleAttrValue> skuSaleAttrValueList = skuInfo.getSkuSaleAttrValueList();
+        if (!CollectionUtils.isEmpty(skuSaleAttrValueList)) {
+            skuSaleAttrValueList.forEach(skuSaleAttrValue -> {
+                skuSaleAttrValue.setSkuId(skuInfo.getId());
+                skuSaleAttrValue.setSpuId(skuInfo.getSpuId());
+                skuSaleAttrValueMapper.insert(skuSaleAttrValue);
+            });
+        }
+        //sku_attr_value
+        List<SkuAttrValue> skuAttrValueList = skuInfo.getSkuAttrValueList();
+        if (!CollectionUtils.isEmpty(skuAttrValueList)) {
+            skuAttrValueList.forEach(skuAttrValue -> {
+                skuAttrValue.setSkuId(skuInfo.getId());
+                skuAttrValueMapper.insert(skuAttrValue);
+            });
+        }
+
+    }
+
+    /**
+     * 根据三级分类数据获取到skuInfo 列表
+     *
+     * @param skuInfoPage
+     * @param skuInfo
+     * @return
+     */
+    @Override
+    public IPage<SkuInfo> getSpuInfoList(Page<SkuInfo> skuInfoPage, SkuInfo skuInfo) {
+        QueryWrapper<SkuInfo> skuInfoQueryWrapper = new QueryWrapper<>();
+        skuInfoQueryWrapper.eq("category3_id", skuInfo.getCategory3Id());
+        return skuInfoMapper.selectPage(skuInfoPage, skuInfoQueryWrapper);
+    }
+
+    /**
+     * 商品上架
+     *
+     * @param skuId
+     * @return
+     */
+    @Override
+    public void onSale(Long skuId) {
+        // 更改销售状态
+        SkuInfo skuInfo = new SkuInfo();
+        skuInfo.setId(skuId);
+        skuInfo.setIsSale(1);
+        skuInfoMapper.updateById(skuInfo);
+    }
+    /**
+     * 商品下架
+     *
+     * @param skuId
+     * @return
+     */
+    @Override
+    public void cancelSale(Long skuId) {
+        // 更改销售状态
+        SkuInfo skuInfo = new SkuInfo();
+        skuInfo.setId(skuId);
+        skuInfo.setIsSale(0);
+        skuInfoMapper.updateById(skuInfo);
+    }
 }

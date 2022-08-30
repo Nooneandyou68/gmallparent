@@ -21,4 +21,24 @@ public interface SpuInfoService {
      * @param spuInfo
      */
     void saveSpuInfo(SpuInfo spuInfo);
+
+    /**
+     * 修改数据回显
+     *
+     * @param
+     * @return
+     * @author SongBoHao
+     * @date 2022/8/30 19:31
+     */
+    SpuInfo getSpuInfo(Long spuId);
+
+    /**
+     * 修改保存
+     *
+     * @param
+     * @return
+     * @author SongBoHao
+     * @date 2022/8/30 19:31
+     */
+    void updateSpuInfo(SpuInfo spuInfo);
 }

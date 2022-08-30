@@ -54,8 +54,38 @@ public class SpuManageController {
      */
 
     @PostMapping("saveSpuInfo")
-    public Result saveSpuInfo(@RequestBody SpuInfo spuInfo){
+    public Result saveSpuInfo(@RequestBody SpuInfo spuInfo) {
         spuInfoService.saveSpuInfo(spuInfo);
+        return Result.ok();
+    }
+
+    /**
+     * 修改数据回显
+     *
+     * @param
+     * @return
+     * @author SongBoHao
+     * @date 2022/8/30 19:31
+     */
+    //http://localhost/admin/product/getSpuInfo/
+    @GetMapping("getSpuInfo/{spuId}")
+    public Result<SpuInfo> getSpuInfo(@PathVariable Long spuId) {
+        SpuInfo spuInfo = this.spuInfoService.getSpuInfo(spuId);
+        return Result.ok(spuInfo);
+    }
+
+    /**
+     * 修改保存
+     *
+     * @param
+     * @return
+     * @author SongBoHao
+     * @date 2022/8/30 19:31
+     */
+    //http://localhost/admin/product/updateSpuInfo
+    @PostMapping("updateSpuInfo")
+    public Result<SpuInfo> updateSpuInfo(@RequestBody SpuInfo spuInfo) {
+        this.spuInfoService.updateSpuInfo(spuInfo);
         return Result.ok();
     }
 }
