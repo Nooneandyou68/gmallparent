@@ -15,4 +15,13 @@ import java.util.List;
 @Mapper
 public interface SpuSaleAttrMapper extends BaseMapper<SpuSaleAttr> {
     List<SpuSaleAttr> selectSpuSaleAttrList(Long spuId);
+
+    /**
+     * 根据spuId，skuId 查询销售属性集合
+     *
+     * @param skuId
+     * @param spuId
+     * @return
+     */
+    List<SpuSaleAttr> findSpuSaleAttrListCheckBySku(Long skuId, Long spuId);
 }

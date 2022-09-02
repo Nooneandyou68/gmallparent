@@ -4,7 +4,9 @@ import com.atguigu.gmall.model.product.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @PROJECT_NAME: gamallparent
@@ -135,4 +137,67 @@ public interface ManageService {
      * @return
      */
     void cancelSale(Long skuId);
+
+    /**
+     * 根据skuId获取skuInfo
+     *
+     * @param
+     * @return
+     * @author SongBoHao
+     * @date 2022/8/31 16:32
+     */
+    SkuInfo getSkuInfo(Long skuId);
+
+    /**
+     * 根据skuId获取海报图片
+     *
+     * @param
+     * @return
+     * @author SongBoHao
+     * @date 2022/8/31 16:39
+     */
+    List<SpuPoster> findSpuPosterBySpuId(Long spuId);
+
+    /**
+     * 根据skuId获取最新商品价格
+     *
+     * @param
+     * @return
+     * @author SongBoHao
+     * @date 2022/8/31 16:45
+     */
+    BigDecimal getSkuPrice(Long skuId);
+
+    /**
+     * 通过三级分类id查询分类信息
+     *
+     * @param category3Id
+     * @return
+     */
+    BaseCategoryView getCategoryViewByCategory3Id(Long category3Id);
+
+    /**
+     * 根据spuId，skuId 查询销售属性集合
+     *
+     * @param skuId
+     * @param spuId
+     * @return
+     */
+    List<SpuSaleAttr> getSpuSaleAttrListCheckBySku(Long skuId, Long spuId);
+
+    /**
+     * 根据spuId 查询map 集合属性
+     *
+     * @param spuId
+     * @return
+     */
+    Map getSkuValueIdsMap(Long spuId);
+
+    /**
+     * 通过skuId 集合来查询数据
+     *
+     * @param skuId
+     * @return
+     */
+    List<BaseAttrInfo> getAttrList(Long skuId);
 }
