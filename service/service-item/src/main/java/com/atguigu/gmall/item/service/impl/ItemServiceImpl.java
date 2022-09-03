@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class ItemServiceImpl implements ItemService {
 
+    @Qualifier("productFeignClientImpl")
     @Autowired
     private ProductFeignClient productFeignClient;
 
