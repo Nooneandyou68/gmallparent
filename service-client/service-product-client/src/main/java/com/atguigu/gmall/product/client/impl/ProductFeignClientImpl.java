@@ -57,4 +57,9 @@ public class ProductFeignClientImpl implements ProductFeignClient {
     public Result<List<JSONObject>> getBaseCategoryList() {
         return null;
     }
+
+    @Override
+    public BaseTrademark getTradeMark(Long tmId) {
+        return null;
+    }
 }

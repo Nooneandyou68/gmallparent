@@ -3,6 +3,7 @@ package com.atguigu.gmall.item.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.atguigu.gmall.common.constant.RedisConst;
 import com.atguigu.gmall.item.service.ItemService;
+import com.atguigu.gmall.list.client.ListFeignClient;
 import com.atguigu.gmall.model.product.*;
 import com.atguigu.gmall.product.client.ProductFeignClient;
 import jdk.nashorn.internal.ir.annotations.Reference;
@@ -34,6 +35,8 @@ public class ItemServiceImpl implements ItemService {
     private ProductFeignClient productFeignClient;
     @Autowired
     private ThreadPoolExecutor threadPoolExecutor;
+    @Autowired
+    private ListFeignClient listFeignClient;
     /**
      * 获取sku详情信息
      *
@@ -97,6 +100,12 @@ public class ItemServiceImpl implements ItemService {
                 result.put("skuAttrList", mapList);
             }
         },threadPoolExecutor);
+
+        //获取热点数据
+        CompletableFuture<Void> hotScoreCompletableFuture = skuInfoCompletableFuture.thenAcceptAsync(skuInfo -> {
+            listFeignClient.incrHotScore(skuInfo.getId());
+        }, threadPoolExecutor);
+
         CompletableFuture.allOf(
                 skuInfoCompletableFuture,
                 categoryViewCompletableFuture,
@@ -104,7 +113,8 @@ public class ItemServiceImpl implements ItemService {
                 spuSaleAttrCompletableFuture,
                 posterCompletableFuture,
                 strJsonCompletableFuture,
-                BaseAttrInfoCompletableFuture
+                BaseAttrInfoCompletableFuture,
+                hotScoreCompletableFuture
         ).join();
         //返回数据
         return result;

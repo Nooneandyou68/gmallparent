@@ -44,7 +44,6 @@ public class SkuInfoServiceImpl implements SkuInfoService {
      * @date 2022/8/30 20:13
      */
     @Override
-
     public SkuInfo getSkuInfo(Long id) {
         SkuInfo skuInfo = skuInfoMapper.selectById(id);
         List<SkuImage> skuImageList = skuImageMapper.selectList(new QueryWrapper<SkuImage>().eq("sku_id", id));

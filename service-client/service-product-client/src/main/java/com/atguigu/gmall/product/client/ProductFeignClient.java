@@ -106,4 +106,12 @@ public interface ProductFeignClient {
      */
     @GetMapping("api/product/getBaseCategoryList")
     Result<List<JSONObject>> getBaseCategoryList();
+
+    /**
+     * 查询 sku 对应的品牌信息！ tmId 可以从skuInfo 获取！
+     *
+     * @return
+     */
+    @GetMapping("api/product/inner/getTrademark/{tmId}")
+    BaseTrademark getTradeMark(@PathVariable Long tmId);
 }
