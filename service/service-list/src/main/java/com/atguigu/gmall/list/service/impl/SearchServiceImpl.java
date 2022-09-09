@@ -321,7 +321,7 @@ public class SearchServiceImpl implements SearchService {
         searchSourceBuilder.size(searchParam.getPageSize());
         // 构建排序
         String order = searchParam.getOrder();
-        if (StringUtils.isEmpty(order)) {
+        if (!StringUtils.isEmpty(order)) {
             //分割字符串
             String[] split = order.split(":");
             //判断是否有值
