@@ -68,6 +68,8 @@ public class AuthGlobalFilter implements GlobalFilter {
         }
         //1、先获取登录id，在缓存中获取数据，必须要有token， token存储在header或cookie中
         String userId = this.getUserId(request);
+        // 获取临时用户id
+        String userTempId = this.getUserTempId(request);
         //2、判断是否属于非法登录
         if ("-1".equals(userId)) {
             //设置响应
@@ -102,14 +104,37 @@ public class AuthGlobalFilter implements GlobalFilter {
             }
         }
         //将获取到的用户id添加到请求头
-        if (!StringUtils.isEmpty(userId)) {
-            //放入请求头
-            request = request.mutate().header("userId", userId).build();
+        if (!StringUtils.isEmpty(userId) || !StringUtils.isEmpty(userTempId)) {
+            if (!StringUtils.isEmpty(userId)) {
+                //放入请求头
+                request = request.mutate().header("userId", userId).build();
+            }
+            //判断临时用户id
+            if (!StringUtils.isEmpty(userTempId)) {
+                //放入请求头
+                request = request.mutate().header("userTempId", userTempId).build();
+            }
             // exchange与request关联起来
             return chain.filter(exchange.mutate().request(request).build());
         }
         // 默认返回 表示这个过滤器结束了
         return chain.filter(exchange);
+    }
+
+    //获取临时用户id
+    private String getUserTempId(ServerHttpRequest request) {
+        //可能存在cookie header 中
+        String userTempId = "";
+        HttpCookie httpCookie = request.getCookies().getFirst("userTempId");
+        if (httpCookie != null) {
+            userTempId = httpCookie.getValue();
+        } else {
+            List<String> stringList = request.getHeaders().get("userTempId");
+            if (!CollectionUtils.isEmpty(stringList)) {
+                userTempId = stringList.get(0);
+            }
+        }
+        return userTempId;
     }
 
     /**
@@ -158,16 +183,17 @@ public class AuthGlobalFilter implements GlobalFilter {
         //判断token不为空
         if (!StringUtils.isEmpty(token)) {
             //组成缓存key
-            String userLoginKey = "user:login:" + token;
+            //user:login:7efbf52ee3da4aeab06a51ee739ad232
+            //String userLoginKey = ;
             //从缓存中获取userId
-            String redisValue = (String) redisTemplate.opsForValue().get(userLoginKey);
-            if (StringUtils.isEmpty(redisValue)) {
+            String redisValue = (String) redisTemplate.opsForValue().get("user:login:" + token);
+            if (!StringUtils.isEmpty(redisValue)) {
                 JSONObject jsonObject = JSONObject.parseObject(redisValue);
-                //取出ip
+                //取出ip!
                 String ip = (String) jsonObject.get("ip");
                 //判断当前缓存中ip与正在操作的客户端ip地址是否一致
                 if (IpUtil.getGatwayIpAddress(request).equals(ip)) {
-                    //如果相同返回用户id
+                    //如果相同返回用户idCannot find local variable 'userLoginKey'
                     String userId = (String) jsonObject.get("userId");
                     return userId;
                 } else {
