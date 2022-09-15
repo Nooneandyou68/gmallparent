@@ -15,8 +15,7 @@
         <module>server-gateway</module>
         <module>service-client</module>
         <module>web</module>
-        <module>common/web-util</module>
-        <module>service-client/service-list-client</module>
+        <module>ware-manage</module>
     </modules>
 
     <!--定义jar包的版本号-->

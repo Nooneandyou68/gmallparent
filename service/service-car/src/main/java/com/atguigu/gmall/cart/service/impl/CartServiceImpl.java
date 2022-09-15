@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @PROJECT_NAME: gmallparent
@@ -260,5 +261,21 @@ public class CartServiceImpl implements CartService {
         String cartKey = this.getCartKey(userId);
         //查询数据
         this.redisTemplate.opsForHash().delete(cartKey, skuId.toString());
+    }
+
+    /**
+     * 根据用户Id 查询购物车列表
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<CartInfo> getCartCheckedList(String userId) {
+        //获取购物车key
+        String cartKey = this.getCartKey(userId);
+        //获取数据
+        List<CartInfo> cartInfoList = this.redisTemplate.opsForHash().values(cartKey);
+        //过滤数据并返回
+        return cartInfoList.stream().filter(cartInfo -> cartInfo.getIsChecked().intValue() == 1).collect(Collectors.toList());
     }
 }
